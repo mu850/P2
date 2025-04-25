@@ -1,0 +1,15 @@
+
+{
+  "name": "اسماعیل آٹا چکی",
+  "short_name": "آٹا چکی",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#A7D397",
+  "theme_color": "#A7D397",
+  "orientation": "portrait",
+  "icons": [{
+    "src": "https://img.icons8.com/emoji/96/flour-bag.png",
+    "sizes": "96x96",
+    "type": "image/png"
+  }]
+}

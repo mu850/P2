@@ -1,0 +1,86 @@
+
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>اسماعیل آٹا چکی</title>
+  <meta name="theme-color" content="#A7D397">
+</head>
+<body style="background:#F0FFF0; font-family:'Noto Nastaliq Urdu', serif; padding:20px; text-align:right">
+  <div style="background:white; padding:20px; border-radius:10px; max-width:500px; margin:auto;">
+    <h2>اسماعیل آٹا چکی</h2>
+    
+    <label>کل وزن گندم (کلوگرام):</label>
+    <input type="number" id="weight" placeholder="مثلاً 100"><br><br>
+    
+    <label>آٹا فی کلو قیمت (روپے):</label>
+    <input type="number" id="rate" placeholder="مثلاً 80"><br><br>
+    
+    <label>ایڈوانس آٹا (کلوگرام):</label>
+    <input type="number" id="advanceFlour" placeholder="مثلاً 2.5"><br><br>
+
+    <label><input type="checkbox" id="noCleaning"> صفائی نہیں کرنی</label><br>
+    <label><input type="checkbox" id="noCutting"> کٹوتی نہیں کرنی، اس کی قیمت ادا ہوگی</label><br>
+    <label><input type="checkbox" id="convertToFlour"> مکمل قیمت کو آٹے میں کنورٹ کریں</label><br><br>
+
+    <button onclick="calculate()">حساب کریں</button>
+
+    <div id="output" style="background:#e9ffe9; padding:15px; margin-top:20px; border-radius:10px; display:none;"></div>
+  </div>
+
+  <script>
+    function calculate() {
+      let totalKg = parseFloat(document.getElementById("weight").value);
+      let rate = parseFloat(document.getElementById("rate").value);
+      let advance = parseFloat(document.getElementById("advanceFlour").value) || 0;
+      let noCleaning = document.getElementById("noCleaning").checked;
+      let noCutting = document.getElementById("noCutting").checked;
+      let convertToFlour = document.getElementById("convertToFlour").checked;
+
+      if (isNaN(totalKg) || totalKg <= 0) {
+        alert("براہ کرم درست وزن درج کریں");
+        return;
+      }
+
+      let cut = noCutting ? 0 : totalKg * 0.05;
+      let afterCut = totalKg - cut;
+      let afterAdvance = afterCut - advance;
+
+      let mann = totalKg / 40;
+      let cleaning = noCleaning ? 0 : mann * 40;
+      let grinding = mann * 130;
+      let cutValue = noCutting ? cut * rate : 0;
+      let totalCost = cleaning + grinding + cutValue;
+
+      let costAsFlour = convertToFlour && rate > 0 ? totalCost / rate : 0;
+      let finalFlour = afterAdvance - costAsFlour;
+
+      let html = `
+        <p><strong>کل وزن:</strong> ${totalKg.toFixed(2)} کلو</p>
+        <p><strong>کٹوتی:</strong> ${cut.toFixed(2)} کلو</p>
+        <p><strong>کٹوتی کے بعد آٹا:</strong> ${afterCut.toFixed(2)} کلو</p>
+        <p><strong>ایڈوانس آٹا:</strong> ${advance.toFixed(2)} کلو</p>
+        <p><strong>ایڈوانس کے بعد آٹا:</strong> ${afterAdvance.toFixed(2)} کلو</p>
+        <p><strong>صفائی کے پیسے:</strong> روپے ${cleaning.toFixed(0)}</p>
+        <p><strong>پسائی کے پیسے:</strong> روپے ${grinding.toFixed(0)}</p>
+        <p><strong>کٹوتی کی قیمت:</strong> روپے ${cutValue.toFixed(0)}</p>
+        <p><strong>کل لاگت:</strong> روپے ${totalCost.toFixed(0)}</p>
+      `;
+
+      if (convertToFlour && rate > 0) {
+        html += `<p><strong>کل لاگت کے برابر آٹا:</strong> ${costAsFlour.toFixed(2)} کلو</p>`;
+      }
+
+      html += `<p><strong>کسٹمر کو ملنے والا آخری آٹا:</strong> ${finalFlour.toFixed(2)} کلو</p>`;
+
+      document.getElementById("output").style.display = "block";
+      document.getElementById("output").innerHTML = html;
+    }
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js');
+    }
+  </script>
+</body>
+</html>

@@ -58,6 +58,7 @@ if (convertToFlour && (isNaN(rate) || rate <= 0)) {
       let cutValue = noCutting ? cut * rate : 0;
       let totalCost = cleaning + grinding + cutValue;
 
+
       let costAsFlour = convertToFlour && rate > 0 ? totalCost / rate : 0;
       let finalFlour = afterAdvance - costAsFlour;
 

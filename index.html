@@ -42,7 +42,12 @@
         alert("براہ کرم درست وزن درج کریں");
         return;
       }
+if (convertToFlour && (isNaN(rate) || rate <= 0)) {
+  alert("براہ کرم آٹے کی فی کلو قیمت درج کریں");
+  return;
+}
 
+      
       let cut = noCutting ? 0 : totalKg * 0.05;
       let afterCut = totalKg - cut;
       let afterAdvance = afterCut - advance;
